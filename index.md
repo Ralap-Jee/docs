@@ -57,3 +57,6 @@ export SBT_OPTS="-Dsbt.override.build.repos=true"
 ## 项目信息
 
 开发人员名单可见于 [贡献者](https://github.com/Ralap-Jee/akkanmore/graphs/contributors)
+
+
+---

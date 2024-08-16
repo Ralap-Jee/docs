@@ -47,3 +47,6 @@
 
 ### 1.7.0 (2024-05-23)
 - Building documentation with Mkdocs.
+
+
+---

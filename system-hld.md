@@ -2,7 +2,7 @@
 
 # 项目概述
 
-基于 [Akka](https://akka.io/) 的分布式编程框架，本项目设计了一个系统级异步类脑芯片仿真器，借助 [AkkA Actor](https://doc.akka.io/docs/akka/current/actors.html) 
+基于 [Akka](https://akka.io/) 的分布式编程框架，本项目设计了一个系统级异步类脑芯片仿真器，借助 [AkkA Actor](https://doc.akka.io/docs/akka/current/actors.html)
 的分布式异步通信行为来仿真模拟异步电路 各个模块之间的握手行为和数据流，在系统级高层次为异步类脑芯片的架构提供先验性的仿真性能分析，并保留丰富的可拓展接口，提供了异步芯片架构仿真系统的开发解决方案。
 
 ![](images\system-architecture.png "akkanmore-system-architecture")
@@ -23,34 +23,30 @@
    2. **输入端口（Input Unit）**：路由器的输入端口，负责缓冲接收到的数据。
    3. **输出端口（Output Unit）**：路由器的输出端口，负责缓冲准备发送的数据。
 
+## 异步电路概述
 
-## 项目结构
+异步电路是一种不依赖全局时钟信号的电路，其工作原理是通过数据的到达时间来控制电路的工作。异步电路的优点是低功耗、低辐射、低时延、高可靠性等。异步电路天然匹配类脑计算的脉冲稀疏特性和事件驱动特性，因而大多数类脑芯片都是采用异步电路来设计的。
 
-    docs/                   # The documention directory.
-    logs/                   # The simulation ouput log directory.
-    project/                # The building files of the project using Sbt.
-    src/main/               # The main source code directory.
-    ├── resources/
-    │   ├── logback.xml     # The logback configuration file.
-    ├── scala/
-    │   ├── akkanmore/      # The main package of the project.
-    │   │   ├── AsyncLib/   # The asynchronous library package.
-    │   │   │   ├── ...
-    │   │   ├── NoC/        # The network-on-chip modeling package.
-    │   │   │   ├── ...
-    │   │   ├── PE/         # The processing element modeling package.
-    │   │   │   ├── ...
-    │   │   ├── config/     # The configuration parameter package.
-    │   │   │   ├── ...
-    │   │   ├── example/    # The example usage.
-    │   │   │   ├── ...
-    │   │   ├── util/       # The utility package.
-    │   │   │   ├── ...
-    └────
-    target/                 # The building output directory.
-    README.md               # The README file of the project.
-    build.sbt               # The building configuration file of the project.
+在系统级层次观察异步电路的特性，可以发现：
 
-## 项目信息
+1. **异步电路的数据流（data flow）特性**：异步电路的数据流是通过数据到达时间来控制的，数据到达时间早的数据会先被处理，数据到达时间晚的数据会后被处理。
+2. **异步电路的握手（handshake）协议**：异步电路中各个异步控制器是通过握手信号来进行交互的，从而生成本地时钟信号控制本级寄存器/触发器。通过仿真异步电路的握手协议，可以实现对异步电路数据流行为的模拟。
+3. **异步电路的数据流与电路状态相关**：异步电路的数据流是与电路状态相关的，数据流的到达时间和电路状态有关，如**数据令牌前向传播（forward pass of tokens）状态**与**空位气泡反向传播（backward pass of bubbles）状态**、**上升沿触发（posedge trigger）状态**与**下降沿触发（negedge trigger）状态**等。不同状态下，数据流的行为（**如通过的延迟时间delay**）不同。
+
+## 系统级芯片仿真器概述
+
+系统级芯片仿真器在系统级提供芯片硬件的仿真模拟结果，对芯片性能代价如PPA进行系统级层次的分析。
+
+系统级芯片仿真器相比电路仿真器（如Modelsim、VCS等），其特点在于：
+
+1. **仿真速度快**：系统级仿真器是基于高层次的模型进行仿真的，相比电路仿真器，其仿真速度更快。
+2. **架构灵活度高**：系统级仿真器充分利用高级编程语言的特性，可以方便地对芯片架构建立的模型进行修改，具备远超RTL级的设计灵活性。
+3. **仿真精度低**：由于抽象层次较高，系统级建模忽略了很多电路细节，因而仿真的结果精度相比电路仿真要低。
+
+充分利用系统级仿真器对异步类脑芯片的模拟分析，可以在芯片架构设计阶段进行高效率迭代优化，以提高芯片设计质量和效率。
+
+## 阅读文献
 
 开发人员名单可见于 [贡献者](https://github.com/Ralap-Jee/akkanmore/graphs/contributors)
+
+---
